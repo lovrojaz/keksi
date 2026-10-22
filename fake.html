@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="sl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lovro - Moja spletna stran</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6fb;
+            color: #263248;
+            line-height: 1.7;
+        }
+
+        /* MENI */
+        nav {
+            background-color: #172338;
+            padding: 18px 8%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        nav h2 {
+            color: #ffc66d;
+            font-size: 25px;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 25px;
+            flex-wrap: wrap;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        nav a:hover {
+            color: #ffc66d;
+        }
+
+        /* UVOD */
+        .hero {
+            background: linear-gradient(135deg, #172338, #354f73);
+            color: white;
+            text-align: center;
+            padding: 90px 20px;
+        }
+
+        .hero h1 {
+            font-size: 42px;
+            margin-bottom: 15px;
+        }
+
+        .hero p {
+            font-size: 18px;
+            max-width: 650px;
+            margin: 0 auto 25px;
+        }
+
+        .gumb {
+            display: inline-block;
+            background-color: #ffc66d;
+            color: #172338;
+            padding: 12px 25px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .gumb:hover {
+            background-color: white;
+            transform: translateY(-2px);
+        }
+
+        /* GLAVNA VSEBINA */
+        .vsebina {
+            max-width: 1000px;
+            margin: 50px auto;
+            padding: 0 20px;
+        }
+
+        .naslov {
+            text-align: center;
+            font-size: 30px;
+            margin-bottom: 25px;
+            color: #172338;
+        }
+
+        .kartica {
+            background-color: white;
+            padding: 30px;
+            margin-bottom: 30px;
+            border-radius: 18px;
+            box-shadow: 0 5px 20px #17233812;
+        }
+
+        .kartica h3 {
+            color: #263f63;
+            font-size: 24px;
+            margin-bottom: 15px;
+        }
+
+        .slika {
+            display: block;
+            width: 100%;
+            max-width: 350px;
+            height: auto;
+            margin: 20px auto;
+            border-radius: 15px;
+        }
+
+        .povezava {
+            display: inline-block;
+            margin-top: 15px;
+            background-color: #263f63;
+            color: white;
+            padding: 10px 18px;
+            border-radius: 8px;
+            text-decoration: none;
+        }
+
+        .povezava:hover {
+            background-color: #456b9e;
+        }
+
+        /* NOGA */
+        footer {
+            background-color: #172338;
+            color: white;
+            text-align: center;
+            padding: 25px;
+            margin-top: 50px;
+        }
+
+        /* PRILAGODITEV ZA TELEFONE */
+        @media (max-width: 600px) {
+            nav {
+                flex-direction: column;
+            }
+
+            nav ul {
+                justify-content: center;
+                gap: 15px;
+            }
+
+            .hero h1 {
+                font-size: 30px;
+            }
+
+            .hero {
+                padding: 60px 18px;
+            }
+
+            .kartica {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- MENI -->
+    <nav>
+        <h2>🍪 Lovro's World</h2>
+
+        <ul>
+            <li><a href="#domov">Domov</a></li>
+            <li><a href="#hobiji">Moji hobiji</a></li>
+            <li><a href="#sola">Moja šola</a></li>
+        </ul>
+    </nav>
+
+    <!-- UVODNA STRAN -->
+    <section class="hero" id="domov">
+        <h1>Gospe in gospodje, dobrodošli!</h1>
+
+        <p>
+            Živjo! Ime mi je Lovro, star sem 14 let
+            in obiskujem OŠ Radlje ob Dravi.
+            Dobrodošli na moji spletni strani!
+        </p>
+
+        <a href="#hobiji" class="gumb">Spoznaj moje hobije ↓</a>
+    </section>
+
+    <!-- HOBIJI -->
+    <main class="vsebina" id="hobiji">
+
+        <h2 class="naslov">✨ Moji hobiji</h2>
+
+        <section class="kartica">
+            <h3>🍪 Peka keksov</h3>
+
+            <p>
+                Eden izmed mojih hobijev je peka keksov.
+                Še posebej dobri so čokoladni piškoti,
+                ki so na zunaj hrustljavi, v sredini pa mehki
+                in sočni.
+            </p>
+
+            <img
+                src="classic cookies.jpg"
+                alt="Čokoladni piškoti"
+                class="slika"
+            >
+
+            <p>
+                Skrivnost najboljših piškotov je v pravilnem
+                razmerju sestavin. Rjavi sladkor pomaga
+                ohraniti sočnost, hlajenje testa pred peko
+                pa pripomore k odličnemu okusu in teksturi.
+            </p>
+
+            <a
+                href="https://okusno.je/recept/piskoti-s-cokoladnimi-koscki"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="povezava"
+            >
+                Oglej si recept za kekse →
+            </a>
+        </section>
+
+        <!-- MOJA SOLA -->
+        <section class="kartica" id="sola">
+            <h3>🏫 Moja šola</h3>
+
+            <p>
+                Obiskujem Osnovno šolo Radlje ob Dravi.
+                Tukaj lahko prebereš več o moji šoli.
+            </p>
+
+            <a href="osradlje.html" class="povezava">
+                Opis moje šole →
+            </a>
+        </section>
+
+    </main>
+
+    <!-- NOGA SPLETNE STRANI -->
+    <footer>
+        <p>© 2026 Lovro | Moja spletna stran</p>
+        <p>Ustvarjeno z HTML in CSS ❤️</p>
+    </footer>
+
+</body>
+</html>

@@ -1,0 +1,1308 @@
+<!DOCTYPE html>
+<html lang="sl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PLINKO</title>
+
+<style>
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    min-height:100vh;
+    background:
+        radial-gradient(circle at 50% -10%, #29343d, #10161b 45%, #06090c 100%);
+    color:#e8edf0;
+    font-family:Arial,Helvetica,sans-serif;
+}
+
+.app{
+    width:min(1250px,100%);
+    margin:auto;
+    padding:20px;
+}
+
+header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:18px;
+}
+
+.logo{
+    font-size:30px;
+    font-weight:700;
+    letter-spacing:5px;
+    color:#e5e9ec;
+}
+
+.balance{
+    background:#11181e;
+    border:1px solid #56636c;
+    border-radius:8px;
+    padding:10px 18px;
+    min-width:175px;
+    text-align:right;
+    box-shadow:0 8px 25px #0008;
+}
+
+.balance small{
+    display:block;
+    color:#7e8a92;
+    font-size:10px;
+    letter-spacing:2px;
+    margin-bottom:4px;
+}
+
+#money{
+    font-size:23px;
+    font-weight:bold;
+}
+
+.layout{
+    display:grid;
+    grid-template-columns:minmax(0,1fr) 300px;
+    gap:18px;
+}
+
+.board{
+    background:#090f14;
+    border:1px solid #52616b;
+    border-radius:10px;
+    overflow:hidden;
+    box-shadow:0 20px 60px #000b;
+}
+
+canvas{
+    display:block;
+    width:100%;
+    height:700px;
+}
+
+.panel{
+    background:linear-gradient(150deg,#1c252c,#0e1419);
+    border:1px solid #4d5a63;
+    border-radius:10px;
+    padding:20px;
+    box-shadow:0 20px 50px #0009;
+}
+
+.title{
+    color:#aeb8be;
+    font-size:12px;
+    letter-spacing:2px;
+    border-bottom:1px solid #ffffff12;
+    padding-bottom:13px;
+    margin-bottom:18px;
+}
+
+label{
+    display:block;
+    color:#7e8a92;
+    font-size:12px;
+    margin-bottom:7px;
+}
+
+input{
+    width:100%;
+    height:46px;
+    background:#080d11;
+    color:#fff;
+    border:1px solid #45535d;
+    border-radius:6px;
+    padding:0 12px;
+    font-size:17px;
+    outline:none;
+}
+
+input:focus{
+    border-color:#aeb8be;
+}
+
+button{
+    width:100%;
+    height:48px;
+    margin-top:13px;
+    border-radius:6px;
+    border:1px solid #aeb8be;
+    background:linear-gradient(#e2e6e8,#9ca6ac);
+    color:#11161a;
+    font-weight:bold;
+    letter-spacing:1px;
+    cursor:pointer;
+}
+
+button:hover{
+    background:linear-gradient(#f0f2f3,#b5bdc2);
+}
+
+button:active{
+    transform:translateY(1px);
+}
+
+.status{
+    margin-top:18px;
+    padding:15px;
+    background:#080d11;
+    border:1px solid #33414a;
+    border-radius:7px;
+    text-align:center;
+}
+
+#result{
+    font-size:20px;
+    font-weight:bold;
+}
+
+#sub{
+    margin-top:5px;
+    color:#74818a;
+    font-size:12px;
+}
+
+.historyTitle{
+    color:#6f7d86;
+    font-size:10px;
+    letter-spacing:2px;
+    margin-top:20px;
+    margin-bottom:7px;
+}
+
+.history{
+    max-height:220px;
+    overflow:auto;
+}
+
+.historyRow{
+    display:flex;
+    justify-content:space-between;
+    padding:9px 2px;
+    border-bottom:1px solid #ffffff09;
+    font-size:13px;
+}
+
+.win{
+    color:#b9d5c1;
+}
+
+.loss{
+    color:#d29b9b;
+}
+
+.note{
+    color:#515f68;
+    font-size:10px;
+    line-height:1.5;
+    margin-top:18px;
+}
+
+@media(max-width:850px){
+    .app{
+        padding:10px;
+    }
+
+    .layout{
+        grid-template-columns:1fr;
+    }
+
+    canvas{
+        height:570px;
+    }
+
+    .panel{
+        order:2;
+    }
+
+    .logo{
+        font-size:23px;
+    }
+
+    .balance{
+        min-width:145px;
+    }
+
+    #money{
+        font-size:19px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<header>
+    <div class="logo">PLINKO</div>
+
+    <div class="balance">
+        <small>STANJE</small>
+        <span id="money">€500,00</span>
+    </div>
+</header>
+
+<div class="layout">
+
+    <div class="board">
+        <canvas id="canvas"></canvas>
+    </div>
+
+    <div class="panel">
+
+        <div class="title">IGRA</div>
+
+        <label for="bet">ZNESEK</label>
+
+        <input
+            id="bet"
+            type="number"
+            min="1"
+            step="1"
+            value="10"
+        >
+
+        <button id="drop">
+            SPUSTI KROGLICO
+        </button>
+
+        <div class="status">
+            <div id="result">Pripravljeno</div>
+            <div id="sub">Izberi znesek in spusti kroglico.</div>
+        </div>
+
+        <div class="historyTitle">
+            ZGODOVINA
+        </div>
+
+        <div id="history" class="history"></div>
+
+        <div class="note">
+            Uporablja se samo izmišljeni denar znotraj igre.
+            Stanje se shrani lokalno v brskalniku.
+        </div>
+
+    </div>
+
+</div>
+</div>
+
+
+<script>
+
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
+
+let W = 900;
+let H = 700;
+
+
+/* =========================
+   DENAR
+========================= */
+
+let money = Number(
+    localStorage.getItem("plinkoMoney")
+);
+
+/*
+   Če igralec igra prvič,
+   začne s 500 €.
+*/
+if(!Number.isFinite(money)){
+    money = 500;
+}
+
+
+/* =========================
+   IGRA
+========================= */
+
+let pegs = [];
+let balls = [];
+let particles = [];
+let history = [];
+
+const multipliers = [
+    0.2,
+    0.5,
+    0.8,
+    1,
+    1.2,
+    1.5,
+    2,
+    3,
+    2,
+    1.5,
+    1.2,
+    1,
+    0.8,
+    0.5,
+    0.2
+];
+
+
+/* =========================
+   DENAR
+========================= */
+
+function moneyFormat(value){
+
+    return "€" + value.toLocaleString(
+        "sl-SI",
+        {
+            minimumFractionDigits:2,
+            maximumFractionDigits:2
+        }
+    );
+}
+
+function saveMoney(){
+
+    localStorage.setItem(
+        "plinkoMoney",
+        money
+    );
+}
+
+function updateMoney(){
+
+    document.getElementById("money")
+        .textContent = moneyFormat(money);
+
+    saveMoney();
+}
+
+
+/* =========================
+   CANVAS
+========================= */
+
+function resize(){
+
+    const rect =
+        canvas.getBoundingClientRect();
+
+    W = rect.width;
+    H = rect.height;
+
+    canvas.width =
+        W * devicePixelRatio;
+
+    canvas.height =
+        H * devicePixelRatio;
+
+    ctx.setTransform(
+        devicePixelRatio,
+        0,
+        0,
+        devicePixelRatio,
+        0,
+        0
+    );
+
+    createPegs();
+}
+
+window.addEventListener(
+    "resize",
+    resize
+);
+
+
+/* =========================
+   KLINI
+========================= */
+
+function createPegs(){
+
+    pegs = [];
+
+    const rows = 12;
+
+    const spacing =
+        Math.min(55,W/16);
+
+    const center = W/2;
+
+    for(let row=0;row<rows;row++){
+
+        const count =
+            row % 2 === 0 ? 9 : 10;
+
+        const offset =
+            row % 2 === 0
+                ? 0
+                : spacing/2;
+
+        const start =
+            center
+            - ((count-1)*spacing)/2
+            + offset;
+
+        for(let i=0;i<count;i++){
+
+            const x =
+                start + i*spacing;
+
+            if(x>30 && x<W-30){
+
+                pegs.push({
+                    x:x,
+                    y:95+row*41,
+                    r:5.5
+                });
+            }
+        }
+    }
+}
+
+
+/* =========================
+   NOVA KROGLICA
+========================= */
+
+function dropBall(){
+
+    const input =
+        document.getElementById("bet");
+
+    const bet =
+        Number(input.value);
+
+    if(!Number.isFinite(bet) || bet<=0){
+        alert("Vnesi veljaven znesek.");
+        return;
+    }
+
+    if(bet>money){
+        alert("Nimaš dovolj denarja.");
+        return;
+    }
+
+    money -= bet;
+
+    updateMoney();
+
+
+    balls.push({
+
+        x:
+            W/2 +
+            (Math.random()-0.5)*40,
+
+        y:65,
+
+        vx:
+            (Math.random()-0.5)*3,
+
+        vy:2.5,
+
+        radius:10,
+
+        bet:bet,
+
+        alive:true
+    });
+
+
+    document.getElementById("result")
+        .textContent =
+        "Kroglica pada";
+
+    document.getElementById("sub")
+        .textContent =
+        balls.length +
+        " aktivnih kroglic";
+}
+
+
+/* =========================
+   FIZIKA
+========================= */
+
+function update(){
+
+    for(const ball of balls){
+
+        if(!ball.alive)
+            continue;
+
+
+        /* gravitacija */
+
+        ball.vy += 0.14;
+
+
+        ball.x += ball.vx;
+        ball.y += ball.vy;
+
+
+        /*
+           rahlo nihanje
+        */
+
+        ball.vx +=
+            (Math.random()-0.5)*0.055;
+
+
+        /*
+           horizontalna hitrost
+        */
+
+        ball.vx =
+            Math.max(
+                -4.5,
+                Math.min(
+                    4.5,
+                    ball.vx
+                )
+            );
+
+
+        /*
+           vertikalna hitrost
+        */
+
+        ball.vy =
+            Math.max(
+                -2.5,
+                Math.min(
+                    5.5,
+                    ball.vy
+                )
+            );
+
+
+        /* levi rob */
+
+        if(ball.x < ball.radius){
+
+            ball.x = ball.radius;
+
+            ball.vx =
+                Math.abs(ball.vx)*0.8;
+        }
+
+
+        /* desni rob */
+
+        if(ball.x > W-ball.radius){
+
+            ball.x =
+                W-ball.radius;
+
+            ball.vx =
+                -Math.abs(ball.vx)*0.8;
+        }
+
+
+        /*
+           TRKI S KLINI
+        */
+
+        for(const peg of pegs){
+
+            const dx =
+                ball.x-peg.x;
+
+            const dy =
+                ball.y-peg.y;
+
+            const distance =
+                Math.hypot(dx,dy);
+
+            const minimum =
+                ball.radius+peg.r;
+
+
+            if(distance<minimum){
+
+                const nx =
+                    dx/(distance||1);
+
+                const ny =
+                    dy/(distance||1);
+
+
+                /* odstranimo prekrivanje */
+
+                const overlap =
+                    minimum-distance;
+
+                ball.x +=
+                    nx*overlap;
+
+                ball.y +=
+                    ny*overlap;
+
+
+                /*
+                   Malo močnejši bočni odboj.
+                   Tako kroglice ne ostanejo
+                   samo na sredini.
+                */
+
+                ball.vx += nx*1.25;
+
+                ball.vy += ny*0.3;
+
+
+                /*
+                   trenje
+                */
+
+                ball.vx *= 0.91;
+
+                ball.vy *= 0.74;
+
+
+                /*
+                   majhna naključna sprememba
+                */
+
+                ball.vx +=
+                    (Math.random()-0.5)*0.3;
+
+
+                /*
+                   preprečimo močne skoke
+                   nazaj navzgor
+                */
+
+                if(ball.vy<0){
+                    ball.vy*=0.3;
+                }
+
+
+                /*
+                   majhen efekt
+                */
+
+                particles.push({
+                    x:peg.x,
+                    y:peg.y,
+                    vx:(Math.random()-0.5)*0.5,
+                    vy:(Math.random()-0.5)*0.5,
+                    life:0.2
+                });
+            }
+        }
+
+
+        /*
+           DNO
+        */
+
+        if(ball.y >= H-78){
+
+            const slotWidth =
+                W/15;
+
+            const index =
+                Math.max(
+                    0,
+                    Math.min(
+                        14,
+                        Math.floor(
+                            ball.x/slotWidth
+                        )
+                    )
+                );
+
+            finishBall(
+                ball,
+                index
+            );
+        }
+    }
+
+
+    balls =
+        balls.filter(
+            ball => ball.alive
+        );
+
+
+    /* delci */
+
+    for(const p of particles){
+
+        p.x += p.vx;
+        p.y += p.vy;
+
+        p.life -= 0.035;
+    }
+
+    particles =
+        particles.filter(
+            p => p.life>0
+        );
+}
+
+
+/* =========================
+   KONEC KROGLICE
+========================= */
+
+function finishBall(ball,index){
+
+    ball.alive = false;
+
+    const multiplier =
+        multipliers[index];
+
+    const payout =
+        ball.bet*multiplier;
+
+    money += payout;
+
+    updateMoney();
+
+
+    document.getElementById("result")
+        .textContent =
+        multiplier >= 1
+            ? "+" + moneyFormat(payout)
+            : moneyFormat(payout);
+
+    document.getElementById("sub")
+        .textContent =
+        "Množitelj " +
+        multiplier +
+        "×";
+
+
+    history.unshift({
+        bet:ball.bet,
+        multiplier:multiplier,
+        payout:payout
+    });
+
+
+    if(history.length>12){
+        history.pop();
+    }
+
+    drawHistory();
+}
+
+
+/* =========================
+   ZGODOVINA
+========================= */
+
+function drawHistory(){
+
+    const element =
+        document.getElementById("history");
+
+    element.innerHTML = "";
+
+    for(const item of history){
+
+        const row =
+            document.createElement("div");
+
+        row.className =
+            "historyRow";
+
+
+        const left =
+            document.createElement("span");
+
+        left.textContent =
+            moneyFormat(item.bet)
+            + " × "
+            + item.multiplier;
+
+
+        const right =
+            document.createElement("span");
+
+        right.textContent =
+            moneyFormat(item.payout);
+
+        right.className =
+            item.multiplier >= 1
+                ? "win"
+                : "loss";
+
+
+        row.appendChild(left);
+        row.appendChild(right);
+
+        element.appendChild(row);
+    }
+}
+
+
+/* =========================
+   OZADJE
+========================= */
+
+function drawBackground(){
+
+    const gradient =
+        ctx.createLinearGradient(
+            0,0,
+            0,H
+        );
+
+    gradient.addColorStop(
+        0,
+        "#17232d"
+    );
+
+    gradient.addColorStop(
+        0.5,
+        "#0e151b"
+    );
+
+    gradient.addColorStop(
+        1,
+        "#080c10"
+    );
+
+    ctx.fillStyle = gradient;
+
+    ctx.fillRect(
+        0,
+        0,
+        W,
+        H
+    );
+}
+
+
+/* =========================
+   KLINI
+========================= */
+
+function drawPegs(){
+
+    for(const peg of pegs){
+
+        /* senca */
+
+        ctx.fillStyle =
+            "rgba(0,0,0,.55)";
+
+        ctx.beginPath();
+
+        ctx.arc(
+            peg.x+1.5,
+            peg.y+2,
+            peg.r+1,
+            0,
+            Math.PI*2
+        );
+
+        ctx.fill();
+
+
+        /* kovina */
+
+        const gradient =
+            ctx.createRadialGradient(
+                peg.x-2,
+                peg.y-2,
+                1,
+                peg.x,
+                peg.y,
+                peg.r
+            );
+
+        gradient.addColorStop(
+            0,
+            "#ffffff"
+        );
+
+        gradient.addColorStop(
+            0.4,
+            "#c4cdd2"
+        );
+
+        gradient.addColorStop(
+            1,
+            "#5c6972"
+        );
+
+        ctx.fillStyle =
+            gradient;
+
+        ctx.beginPath();
+
+        ctx.arc(
+            peg.x,
+            peg.y,
+            peg.r,
+            0,
+            Math.PI*2
+        );
+
+        ctx.fill();
+    }
+}
+
+
+/* =========================
+   SPODNJI BOXI
+========================= */
+
+function drawSlots(){
+
+    const width = W/15;
+
+    for(let i=0;i<15;i++){
+
+        const x = i*width;
+
+        const multiplier =
+            multipliers[i];
+
+        let color;
+
+        if(multiplier>=3){
+            color="#725d2c";
+        }
+        else if(multiplier>=1){
+            color="#405b4d";
+        }
+        else{
+            color="#603d40";
+        }
+
+
+        const gradient =
+            ctx.createLinearGradient(
+                x,
+                H-67,
+                x,
+                H
+            );
+
+        gradient.addColorStop(
+            0,
+            color
+        );
+
+        gradient.addColorStop(
+            1,
+            "#11171b"
+        );
+
+        ctx.fillStyle =
+            gradient;
+
+        ctx.fillRect(
+            x+2,
+            H-66,
+            width-4,
+            63
+        );
+
+
+        ctx.strokeStyle =
+            "#ffffff12";
+
+        ctx.strokeRect(
+            x+2,
+            H-66,
+            width-4,
+            63
+        );
+
+
+        ctx.fillStyle =
+            "#dbe0e3";
+
+        ctx.font =
+            "600 15px Arial";
+
+        ctx.textAlign =
+            "center";
+
+        ctx.fillText(
+            multiplier+"×",
+            x+width/2,
+            H-29
+        );
+    }
+}
+
+
+/* =========================
+   KROGLICE
+========================= */
+
+function drawBalls(){
+
+    for(const ball of balls){
+
+        /* senca */
+
+        ctx.fillStyle =
+            "rgba(0,0,0,.6)";
+
+        ctx.beginPath();
+
+        ctx.arc(
+            ball.x+2,
+            ball.y+3,
+            ball.radius+1,
+            0,
+            Math.PI*2
+        );
+
+        ctx.fill();
+
+
+        /* rob */
+
+        ctx.fillStyle =
+            "#33434c";
+
+        ctx.beginPath();
+
+        ctx.arc(
+            ball.x,
+            ball.y,
+            ball.radius+2,
+            0,
+            Math.PI*2
+        );
+
+        ctx.fill();
+
+
+        /* svetla kroglica */
+
+        const gradient =
+            ctx.createRadialGradient(
+                ball.x-4,
+                ball.y-5,
+                1,
+                ball.x,
+                ball.y,
+                ball.radius
+            );
+
+        gradient.addColorStop(
+            0,
+            "#ffffff"
+        );
+
+        gradient.addColorStop(
+            0.4,
+            "#f4f7f8"
+        );
+
+        gradient.addColorStop(
+            0.75,
+            "#d0d9de"
+        );
+
+        gradient.addColorStop(
+            1,
+            "#87959e"
+        );
+
+        ctx.fillStyle =
+            gradient;
+
+        ctx.beginPath();
+
+        ctx.arc(
+            ball.x,
+            ball.y,
+            ball.radius,
+            0,
+            Math.PI*2
+        );
+
+        ctx.fill();
+
+
+        /* odsev */
+
+        ctx.fillStyle =
+            "rgba(255,255,255,.9)";
+
+        ctx.beginPath();
+
+        ctx.arc(
+            ball.x-3,
+            ball.y-4,
+            2,
+            0,
+            Math.PI*2
+        );
+
+        ctx.fill();
+    }
+}
+
+
+/* =========================
+   DELCI
+========================= */
+
+function drawParticles(){
+
+    for(const p of particles){
+
+        ctx.globalAlpha =
+            Math.max(
+                0,
+                p.life*3
+            );
+
+        ctx.fillStyle =
+            "#dce3e7";
+
+        ctx.beginPath();
+
+        ctx.arc(
+            p.x,
+            p.y,
+            1.2,
+            0,
+            Math.PI*2
+        );
+
+        ctx.fill();
+    }
+
+    ctx.globalAlpha = 1;
+}
+
+
+/* =========================
+   OKVIR
+========================= */
+
+function drawFrame(){
+
+    ctx.strokeStyle =
+        "#596a75";
+
+    ctx.lineWidth = 3;
+
+    ctx.strokeRect(
+        12,
+        12,
+        W-24,
+        H-24
+    );
+
+
+    const gradient =
+        ctx.createLinearGradient(
+            0,
+            13,
+            0,
+            52
+        );
+
+    gradient.addColorStop(
+        0,
+        "#aeb9bf"
+    );
+
+    gradient.addColorStop(
+        .4,
+        "#697780"
+    );
+
+    gradient.addColorStop(
+        1,
+        "#303a41"
+    );
+
+    ctx.fillStyle =
+        gradient;
+
+    ctx.fillRect(
+        13,
+        13,
+        W-26,
+        39
+    );
+
+
+    ctx.fillStyle =
+        "#11171c";
+
+    ctx.font =
+        "600 15px Arial";
+
+    ctx.textAlign =
+        "center";
+
+    ctx.fillText(
+        "PLINKO",
+        W/2,
+        38
+    );
+}
+
+
+/* =========================
+   RISANJE
+========================= */
+
+function draw(){
+
+    drawBackground();
+    drawSlots();
+    drawPegs();
+    drawBalls();
+    drawParticles();
+    drawFrame();
+}
+
+
+/* =========================
+   ANIMACIJA
+========================= */
+
+function loop(){
+
+    update();
+    draw();
+
+    requestAnimationFrame(loop);
+}
+
+
+/* =========================
+   GUMB
+========================= */
+
+document
+    .getElementById("drop")
+    .addEventListener(
+        "click",
+        dropBall
+    );
+
+
+/* =========================
+   START
+========================= */
+
+resize();
+
+updateMoney();
+
+drawHistory();
+
+loop();
+
+</script>
+
+</body>
+</html>

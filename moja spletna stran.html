@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="sl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To sem jaz - Lovro</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6fb;
+            color: #263248;
+            line-height: 1.7;
+        }
+
+        /* MENI */
+        nav {
+            background-color: #172338;
+            padding: 18px 8%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        nav h2 {
+            color: #ffc66d;
+            font-size: 25px;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 22px;
+            flex-wrap: wrap;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        nav a:hover {
+            color: #ffc66d;
+        }
+
+        /* UVOD */
+        .hero {
+            background: linear-gradient(135deg, #172338, #354f73);
+            color: white;
+            text-align: center;
+            padding: 90px 20px;
+        }
+
+        .hero h1 {
+            font-size: 46px;
+            margin-bottom: 15px;
+        }
+
+        .hero p {
+            font-size: 18px;
+            max-width: 650px;
+            margin: 0 auto 25px;
+        }
+
+        .gumb {
+            display: inline-block;
+            background-color: #ffc66d;
+            color: #172338;
+            padding: 12px 25px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+
+        .gumb:hover {
+            background-color: white;
+            transform: translateY(-2px);
+        }
+
+        /* GLAVNA VSEBINA */
+        .vsebina {
+            max-width: 1000px;
+            margin: 50px auto;
+            padding: 0 20px;
+        }
+
+        .naslov {
+            text-align: center;
+            font-size: 30px;
+            margin-bottom: 25px;
+            color: #172338;
+        }
+
+        .kartica {
+            background-color: white;
+            padding: 30px;
+            margin-bottom: 30px;
+            border-radius: 18px;
+            box-shadow: 0 5px 20px #17233812;
+        }
+
+        .kartica h3 {
+            color: #263f63;
+            font-size: 24px;
+            margin-bottom: 15px;
+        }
+
+        .slika {
+            display: block;
+            width: 100%;
+            max-width: 400px;
+            height: auto;
+            margin: 20px auto;
+            border-radius: 15px;
+        }
+
+        .povezava {
+            display: inline-block;
+            margin-top: 15px;
+            background-color: #263f63;
+            color: white;
+            padding: 10px 18px;
+            border-radius: 8px;
+            text-decoration: none;
+        }
+
+        .povezava:hover {
+            background-color: #456b9e;
+        }
+
+        /* IGRA */
+        #igra {
+            text-align: center;
+        }
+
+        #igralnoPolje {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            height: 320px;
+            margin: 20px auto;
+            overflow: hidden;
+            border-radius: 15px;
+            border: 3px solid #263f63;
+            background: linear-gradient(#91d5ff, #e4f8ff);
+        }
+
+        #zvezdica {
+            display: none;
+            position: absolute;
+            font-size: 38px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            line-height: 1;
+            user-select: none;
+        }
+
+        #rezultat {
+            font-size: 20px;
+            font-weight: bold;
+            margin: 12px;
+        }
+
+        #sporocilo {
+            margin-top: 10px;
+        }
+
+        /* NOGA */
+        footer {
+            background-color: #172338;
+            color: white;
+            text-align: center;
+            padding: 25px;
+            margin-top: 50px;
+        }
+
+        /* TELEFONI */
+        @media (max-width: 600px) {
+            nav {
+                flex-direction: column;
+            }
+
+            nav ul {
+                justify-content: center;
+                gap: 15px;
+            }
+
+            .hero h1 {
+                font-size: 32px;
+            }
+
+            .hero {
+                padding: 60px 18px;
+            }
+
+            .kartica {
+                padding: 20px;
+            }
+
+            #igralnoPolje {
+                height: 280px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- MENI -->
+    <nav>
+        <h2>⭐ Lovro's World</h2>
+
+        <ul>
+            <li><a href="#domov">Domov</a></li>
+            <li><a href="#hobiji">Moji hobiji</a></li>
+            <li><a href="#igra">Igra</a></li>
+            <li><a href="#sola">Moja šola</a></li>
+        </ul>
+    </nav>
+
+    <!-- UVOD -->
+    <section class="hero" id="domov">
+        <h1>👋 To sem jaz!</h1>
+
+        <p>
+            Živjo! Ime mi je Lovro, star sem 14 let
+            in obiskujem OŠ Radlje ob Dravi.
+            Na tej spletni strani lahko spoznaš mene,
+            moje hobije in stvari, ki jih rad počnem.
+        </p>
+
+        <a href="#hobiji" class="gumb">
+            Spoznaj me ↓
+        </a>
+    </section>
+
+    <!-- HOBIJI -->
+    <main class="vsebina" id="hobiji">
+
+        <h2 class="naslov">✨ Moji hobiji</h2>
+
+        <!-- PEKA KEKSOV -->
+        <section class="kartica">
+            <h3>🍪 Peka keksov</h3>
+
+            <p>
+                Eden izmed mojih hobijev je peka keksov.
+                Še posebej so mi všeč čokoladni piškoti,
+                ki so na zunaj hrustljavi, v sredini pa
+                mehki in sočni.
+            </p>
+
+            <img
+                src="classic cookies.jpg"
+                alt="Čokoladni piškoti"
+                class="slika"
+            >
+
+            <p>
+                Skrivnost dobrih piškotov je v pravilnem
+                razmerju sestavin. Rjavi sladkor pomaga
+                ohraniti sočnost, hlajenje testa pred peko
+                pa izboljša okus in teksturo.
+            </p>
+
+            <a
+                href="https://okusno.je/recept/piskoti-s-cokoladnimi-koscki"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="povezava"
+            >
+                Oglej si recept za kekse →
+            </a>
+        </section>
+
+        <!-- CLIFF JUMPING -->
+        <section class="kartica">
+            <h3>🌊 Cliff jumping</h3>
+
+            <p>
+                Eden izmed zanimivih hobijev je tudi
+                cliff jumping oziroma skakanje s skal
+                v vodo. Pri tej aktivnosti sta pomembna
+                pogum in dobra presoja.
+            </p>
+
+            <img
+                src="cliffjumping.jpg"
+                alt="Cliff jumping ob vodi"
+                class="slika"
+            >
+
+            <p>
+                Pri takšni aktivnosti je varnost na prvem
+                mestu. Skakati je treba samo na preverjenih
+                mestih, kjer je skakanje dovoljeno, v dovolj
+                globoko vodo brez ovir in pod nadzorom
+                usposobljene osebe. Neznane višine in
+                nepreverjena mesta so lahko zelo nevarni.
+            </p>
+        </section>
+
+        <!-- IGRA -->
+        <section class="kartica" id="igra">
+            <h3>🎮 Ujemi zvezdico!</h3>
+
+            <p>
+                Preizkusi svoje reflekse! Klikni čim več
+                zvezdic, preden zmanjka časa.
+                Imaš 20 sekund.
+            </p>
+
+            <div id="rezultat">
+                Točke: 0 | Čas: 20 s
+            </div>
+
+            <button class="gumb" id="zacetek">
+                Začni igro
+            </button>
+
+            <div id="igralnoPolje">
+                <button
+                    id="zvezdica"
+                    aria-label="Ujemi zvezdico"
+                >⭐</button>
+            </div>
+
+            <p id="sporocilo" aria-live="polite">
+                Pritisni »Začni igro« in se pripravi!
+            </p>
+        </section>
+
+        <!-- MOJA ŠOLA -->
+        <section class="kartica" id="sola">
+            <h3>🏫 Moja šola</h3>
+
+            <p>
+                Obiskujem Osnovno šolo Radlje ob Dravi.
+                V šoli se učim novih stvari, se družim
+                s prijatelji in pridobivam novo znanje.
+            </p>
+
+            <a href="osradlje.html" class="povezava">
+                Opis moje šole →
+            </a>
+        </section>
+
+    </main>
+
+    <!-- NOGA -->
+    <footer>
+        <p>© 2026 Lovro | To sem jaz</p>
+        <p>Ustvarjeno z HTML, CSS in JavaScript ❤️</p>
+    </footer>
+
+    <!-- JAVASCRIPT ZA IGRO -->
+    <script>
+        const zacetek = document.getElementById("zacetek");
+        const zvezdica = document.getElementById("zvezdica");
+        const igralnoPolje = document.getElementById("igralnoPolje");
+        const rezultat = document.getElementById("rezultat");
+        const sporocilo = document.getElementById("sporocilo");
+
+        let tocke = 0;
+        let cas = 20;
+        let aktiven = false;
+        let ura;
+
+        function prikaziRezultat() {
+            rezultat.textContent =
+                "Točke: " + tocke + " | Čas: " + cas + " s";
+        }
+
+        function premakniZvezdico() {
+            const maxX = igralnoPolje.clientWidth - zvezdica.offsetWidth;
+            const maxY = igralnoPolje.clientHeight - zvezdica.offsetHeight;
+
+            const x = Math.random() * Math.max(0, maxX);
+            const y = Math.random() * Math.max(0, maxY);
+
+            zvezdica.style.left = x + "px";
+            zvezdica.style.top = y + "px";
+        }
+
+        function koncajIgro() {
+            aktiven = false;
+            clearInterval(ura);
+            zvezdica.style.display = "none";
+            zacetek.disabled = false;
+            zacetek.textContent = "Igraj znova";
+
+            sporocilo.textContent =
+                "Konec igre! Zbral si " + tocke + " točk. 🎉";
+        }
+
+        zacetek.addEventListener("click", function () {
+            if (aktiven) return;
+
+            tocke = 0;
+            cas = 20;
+            aktiven = true;
+
+            zacetek.disabled = true;
+            zacetek.textContent = "Igra poteka...";
+            sporocilo.textContent = "Hitro! Ujemi zvezdice!";
+            zvezdica.style.display = "block";
+
+            prikaziRezultat();
+            premakniZvezdico();
+
+            ura = setInterval(function () {
+                cas--;
+                prikaziRezultat();
+
+                if (cas <= 0) {
+                    koncajIgro();
+                }
+            }, 1000);
+        });
+
+        zvezdica.addEventListener("click", function () {
+            if (!aktiven) return;
+
+            tocke++;
+            prikaziRezultat();
+            premakniZvezdico();
+        });
+    </script>
+
+</body>
+</html>
